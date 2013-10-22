@@ -1,0 +1,57 @@
+div.span8 {
+	position: relative;
+}
+
+#filter {
+	position: absolute;
+	top: 15px;
+	right: 0px;
+	height: 35px;
+}
+
+#filter input {
+	border: 1px solid #F1F1F1;
+	border-radius: 20px;
+	width: 85px;
+	padding-left: 15px;
+	color: #949494;
+}
+
+div.profile-list img {
+	float: left;
+	margin-right: 20px;
+	margin-top: -5px;
+	width: 70px !important;
+}
+
+.searchable-container > h3 {
+	border-bottom: 1px solid #E9E9E9;
+	padding-bottom: 15px;
+	padding-top: 20px;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+div.profile-list {
+	margin-bottom: 40px;
+	margin-top: 30px;
+}
+
+div.profile-list p {
+	margin-bottom: 0px;
+}
+
+div.profile-list h3.name {
+	font-weight: bold;
+	margin-bottom: 2px;
+	font-size: 19px;
+}
+
+div.profile-list .title {
+	font-family: 'Droid Serif', serif;
+	font-style: italic;
+	color: #6B6B6B;
+	font-size: 14px;
+	text-rendering: optimizeLegibility;
+	position: relative;
+}
