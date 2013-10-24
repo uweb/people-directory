@@ -47,11 +47,37 @@ div.profile-list h3.name {
 	font-size: 19px;
 }
 
-div.profile-list .title {
+div.profile-list .title, div.people-contact .title {
 	font-family: 'Droid Serif', serif;
 	font-style: italic;
 	color: #6B6B6B;
 	font-size: 14px;
 	text-rendering: optimizeLegibility;
 	position: relative;
+}
+
+div.people-contact .title {
+	font-size: 18px;
+	margin-bottom: 1em;
+}
+
+div.people-contact .contact {
+	padding-top: 20px;
+}
+
+div.people-contact {
+	margin-top: 20px;
+	display:inline-block;
+	margin-left: 30px;
+}
+
+img.people-image {
+	display:inline-block;
+	width: 200px;
+	float:left;
+}
+
+div.people-info {
+	padding-top: 30px;
+	clear: both;
 }

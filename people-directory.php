@@ -23,6 +23,7 @@ function register_people_templates() {
 	$template_destination = get_stylesheet_directory() . '/single-people.php';
 	$template_source = dirname(__FILE__) . '/single-people.php';
 	copy($template_source, $template_destination);
+	flush_rewrite_rules();
 }
 
 function deregister_people_templates() {
@@ -39,17 +40,6 @@ function deregister_people_templates() {
 if ( ! post_type_exists( 'people' ) ):
 
 	add_action('init', 'people_post_type');
-	add_action('admin_init', 'single_people_post_option');
-
-	function single_people_post_option() {
-		register_setting('reading', 'people_visible_setting');
-
-		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'reading');
-
-		function people_visible_setting_callback() {
-			echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
-		}
-	}
 
 	function people_post_type() {
 		$labels = array(
@@ -71,12 +61,25 @@ if ( ! post_type_exists( 'people' ) ):
 		$args = array(
 			'labels' => $labels,
 			'public' => get_option('people_visible_setting'),
-			'publicly_queryable' => false,
+			'publicly_queryable' => get_option('people_visible_setting'),
 			'show_ui' => true,
-			'show_in_menu' => true
+			'show_in_menu' => true,
+			'rewrite' => array('slug' => 'people', 'with_front' => false)
 		);
 
 		register_post_type('people', $args);
+	}
+
+	add_action('admin_init', 'single_people_post_option');
+
+	function single_people_post_option() {
+		register_setting('reading', 'people_visible_setting');
+
+		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'reading');
+
+		function people_visible_setting_callback() {
+			echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
+		}
 	}
 
 	add_action('admin_init', 'people_admin_init');
