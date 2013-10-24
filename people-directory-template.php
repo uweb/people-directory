@@ -6,7 +6,7 @@ Template Name: People Directory
 //helper functions
 //this function sorts two people by last name, except for some manually ordered people
 function last_name_sort($a, $b) {
-	//$name_priority = array(1 => "Key Nuttall");
+	$name_priority = array(1 => "Important Name"); //put names you want at the top of the teams here
 	$first = $a->post_title;
 	$second = $b->post_title;
 	$first_index = array_search($first, $name_priority);	
@@ -29,7 +29,7 @@ function last_name_sort($a, $b) {
 
 //this function groups people by team.  The teams are in the order they come up excpet for when manually ordered
 function group_by_team($people) {
-	$priority_team = 'Leadership';
+	$priority_team = 'Leadership';	//this is the name of a team you want to float to the top
 	$team_groups = array($priority_team => array());
 	$team_no_team = array();
 	foreach ($people as $person) {
