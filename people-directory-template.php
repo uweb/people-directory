@@ -101,8 +101,10 @@ function group_by_team($people) {
 							$email = get_post_meta($personID, 'email', true);
 							$person_teams_arr = get_the_terms($personID, 'teams');
 							$person_teams = '';
-							foreach ($person_teams_arr as $person_teams_item) {
-								$person_teams = $person_teams . ' ' . $person_teams_item->name;
+							if (!empty($person_teams_arr)) {
+								foreach ($person_teams_arr as $person_teams_item) {
+									$person_teams = $person_teams . ' ' . $person_teams_item->name;
+								}
 							}
 							?>
 							<div data-team='<?= $team ?>' class='profile-list searchable'>
