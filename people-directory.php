@@ -13,17 +13,24 @@ if (!defined('PEOPLE_DIRECTORY')){
 	define('PEOPLE_DIRECTORY', '1.0');
 }
 
-register_activation_hook( __FILE__, 'register_people_template');
-register_deactivation_hook( __FILE__, 'deregister_people_template');
+register_activation_hook( __FILE__, 'register_people_templates');
+register_deactivation_hook( __FILE__, 'deregister_people_templates');
 
-function register_people_template() {
-	$template_destination = get_stylesheet_directory() . '/people-directory-template.php';
-	$template_source = dirname(__FILE__) . '/people-directory-template.php';
+function register_people_templates() {
+	$directory_destination = get_stylesheet_directory() . '/people-directory-template.php';
+	$directory_source = dirname(__FILE__) . '/people-directory-template.php';
+	copy($directory_source, $directory_destination);
+	$template_destination = get_stylesheet_directory() . '/single-people.php';
+	$template_source = dirname(__FILE__) . '/single-people.php';
 	copy($template_source, $template_destination);
 }
 
-function deregister_people_template() {
+function deregister_people_templates() {
 	$template_path = get_stylesheet_directory() . '/people-directory-template.php';
+	if (file_exists($template_path)) {
+		unlink($template_path);
+	}
+	$template_path = get_stylesheet_directory() . '/single-people.php';
 	if (file_exists($template_path)) {
 		unlink($template_path);
 	}
@@ -32,6 +39,17 @@ function deregister_people_template() {
 if ( ! post_type_exists( 'people' ) ):
 
 	add_action('init', 'people_post_type');
+	add_action('admin_init', 'single_people_post_option');
+
+	function single_people_post_option() {
+		register_setting('reading', 'people_visible_setting');
+
+		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'reading');
+
+		function people_visible_setting_callback() {
+			echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
+		}
+	}
 
 	function people_post_type() {
 		$labels = array(
@@ -52,7 +70,7 @@ if ( ! post_type_exists( 'people' ) ):
 
 		$args = array(
 			'labels' => $labels,
-			'public' => false,
+			'public' => get_option('people_visible_setting'),
 			'publicly_queryable' => false,
 			'show_ui' => true,
 			'show_in_menu' => true
