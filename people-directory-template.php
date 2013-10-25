@@ -88,6 +88,12 @@ function group_by_team($people) {
 
 				<div>
 				<?php
+				if (get_option('people_visible_setting')) {
+					$name_link = true;
+				}
+				else {
+					$name_link = false;
+				}
 				$teams = group_by_team($people); 
 				foreach($teams as $team => $people):
 					if (count($people) != 0): 	//just in case there are zero people in a manually specified team (or Team No-Team) ?>
@@ -110,7 +116,13 @@ function group_by_team($people) {
 							<div data-team='<?= $team ?>' class='profile-list searchable'>
 								<img width='75' height='100' src='<?= $main_pic ?>' alt='<?= $name ?>' />
 								<div class='info'>
+									<?php if ($name_link){
+										?><a href="<?= get_permalink($personID) ?>"><?php
+									} ?>
 									<h3 class='name search-this'><?= $name ?></h3>
+									<?php if ($name_link){
+										?></a><?php
+									}?>
 									<p class='title search-this'><?= $position ?></p>
 									<p class='hidden search-this'><?= $person_teams ?></p>
 									<p><b>Telephone:</b> <?= $phone ?></p>
