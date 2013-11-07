@@ -6,7 +6,6 @@
 	Description: Makes a people content type and directory template
 	Version: 1.0
 	Author: Jon Swanson
-	Author URI: http://gamevatican.com
 	*/
 
 if (!defined('PEOPLE_DIRECTORY')){
