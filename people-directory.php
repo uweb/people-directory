@@ -12,33 +12,30 @@ if (!defined('PEOPLE_DIRECTORY')){
 	define('PEOPLE_DIRECTORY', '1.0');
 }
 
-register_activation_hook( __FILE__, 'register_people_templates');
-register_deactivation_hook( __FILE__, 'deregister_people_templates');
+register_activation_hook( __FILE__, 'create_people_directory_page');
+register_deactivation_hook( __FILE__, 'delete_people_directory_page');
 
-function register_people_templates() {
-	$directory_destination = get_stylesheet_directory() . '/people-directory-template.php';
-	$directory_source = dirname(__FILE__) . '/people-directory-template.php';
-	copy($directory_source, $directory_destination);
-	$template_destination = get_stylesheet_directory() . '/single-people.php';
-	$template_source = dirname(__FILE__) . '/single-people.php';
-	copy($template_source, $template_destination);
-	flush_rewrite_rules();
+function create_people_directory_page() {
+	$people_directory_post = array( 
+		'post_title' => 'People Directory',
+		'post_name' => 'people_directory_from_plugin',
+		'post_type' => 'page'
+	);
+	wp_insert_post($people_directory_post);
 }
 
-function deregister_people_templates() {
-	$template_path = get_stylesheet_directory() . '/people-directory-template.php';
-	if (file_exists($template_path)) {
-		unlink($template_path);
-	}
-	$template_path = get_stylesheet_directory() . '/single-people.php';
-	if (file_exists($template_path)) {
-		unlink($template_path);
+function delete_people_directory_page() {
+	$people_posts = get_posts(array('name' => 'people_directory_from_plugin'));
+	if ($people_posts) {
+		wp_delete_post($people_posts[0]->ID);
 	}
 }
 
 if ( ! post_type_exists( 'people' ) ):
 
 	add_action('init', 'people_post_type');
+	add_filter('single_template', 'add_single_person_template');
+	add_action('template_include', 'add_people_directory_template');
 
 	function people_post_type() {
 		$labels = array(
@@ -137,6 +134,43 @@ if ( ! post_type_exists( 'people' ) ):
 			update_post_meta($post->ID, 'main_pic', $_POST['main_pic']);
 		}
 	}
+
+	function add_single_person_template() {
+		global $post;
+		$single_person_template = 'single-people.php';
+		$this_dir = dirname(__FILE__);
+		if ($post->post_type == 'people') {
+			if (file_exists(get_stylesheet_directory() . '/' . $single_person_template)) {
+				return get_stylesheet_directory() . '/' . $single_person_template;
+			}
+			else if (file_exists(get_template_directory() . '/' . $single_person_template)) {
+				return get_template_directory() . '/' . $single_person_template;
+			}
+			else { 
+				return $this_dir . '/' . $single_person_template;
+			}
+		}
+	}
+
+	function add_people_directory_template($template) {
+		$this_dir = dirname(__FILE__);
+		$people_directory_template = 'people-directory-template.php';
+		if (is_page('people_directory_from_plugin')) {
+			if (file_exists(get_stylesheet_directory() . '/' . $people_directory_template)) {
+				return get_stylesheet_directory() . '/' . $people_directory_template;
+			}
+			else if (file_exists(get_template_directory() . '/' . $people_directory_template)) {
+				return get_template_directory() . '/' . $people_directory_template;
+			}
+			else { 
+				return $this_dir . '/' . $people_directory_template;
+			}
+		}
+		else {
+			return $template;
+		}
+	}
+
 
 endif;
 
