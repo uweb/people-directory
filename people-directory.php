@@ -18,16 +18,18 @@ register_deactivation_hook( __FILE__, 'delete_people_directory_page');
 function create_people_directory_page() {
 	$people_directory_post = array( 
 		'post_title' => 'People Directory',
-		'post_name' => 'people_directory_from_plugin',
+		'post_name' => 'people_directory',
 		'post_type' => 'page'
 	);
 	wp_insert_post($people_directory_post);
 }
 
 function delete_people_directory_page() {
-	$people_posts = get_posts(array('name' => 'people_directory_from_plugin'));
-	if ($people_posts) {
-		wp_delete_post($people_posts[0]->ID);
+	$query = new WP_Query(array('name'=>'people_directory','post_type'=>'page'));
+	$query->the_post();
+	$page_ID = get_the_ID();
+	if ($page_ID) {
+		wp_delete_post($page_ID);
 	}
 }
 
@@ -155,7 +157,7 @@ if ( ! post_type_exists( 'people' ) ):
 	function add_people_directory_template($template) {
 		$this_dir = dirname(__FILE__);
 		$people_directory_template = 'people-directory-template.php';
-		if (is_page('people_directory_from_plugin')) {
+		if (is_page('people_directory')) {
 			if (file_exists(get_stylesheet_directory() . '/' . $people_directory_template)) {
 				return get_stylesheet_directory() . '/' . $people_directory_template;
 			}
