@@ -165,7 +165,7 @@ if ( ! post_type_exists( 'people' ) ):
 		}
 	}
 
-	function add_single_person_template() {
+	function add_single_person_template($template) {
 		global $post;
 		$single_person_template = 'single-people.php';
 		$this_dir = dirname(__FILE__);
@@ -180,6 +180,7 @@ if ( ! post_type_exists( 'people' ) ):
 				return $this_dir . '/' . $single_person_template;
 			}
 		}
+        return $template;
 	}
 
 	function add_people_directory_template($template) {
