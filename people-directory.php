@@ -86,6 +86,7 @@ if ( ! post_type_exists( 'people' ) ):
 		add_meta_box('position', 'Position/Title', 'position_callback', 'people', 'side', 'low');
 		add_meta_box('phone', 'Work Phone Number', 'phone_callback', 'people', 'side', 'low');
 		add_meta_box('email', 'Work Email', 'email_callback', 'people', 'side', 'low');
+		add_meta_box('office_details', 'Office Details', 'office_details_callback', 'people', 'side', 'low');
 		add_meta_box('main_pic', 'Main Picture', 'main_pic_callback', 'people', 'normal', 'low');
 	}
 
@@ -108,6 +109,31 @@ if ( ! post_type_exists( 'people' ) ):
 		$custom = get_post_custom($post->ID);
 		$email = $custom['email'][0];
 		?><input name="email" value="<?= $email ?> " /><?php
+	}
+
+	function office_details_callback() {
+        ?><p>These are optional. If office hours location is more than just one place or not in your office, use the office hours line for all office hours info.<p><?php
+		global $post;
+		$custom = get_post_custom($post->ID);
+        $office_location = $custom['office_location'];
+        if (!empty($office_location)) {
+            $office_location = $office_location[0];
+        }
+		?><label style='display:block'>Office Location:</label>
+		<input name='office_location' style='width:98%' <?php
+		if (!empty($office_location)) {
+			?>value='<?= $office_location ?>' <?php
+		}
+        $office_hours = $custom['office_hours'];
+        if (!empty($office_hours)) {
+            $office_hours = $office_hours[0];
+        }
+		?><label style='display:block'>Office Hours:</label>
+		<input name='office_hours' style='width:98%' <?php
+		if (!empty($office_hours)) {
+			?>value='<?= $office_hours ?>' <?php
+		}
+		?>/><?php
 	}
 
 	function main_pic_callback() {
@@ -134,6 +160,8 @@ if ( ! post_type_exists( 'people' ) ):
 			update_post_meta($post->ID, 'phone', $_POST['phone']);
 			update_post_meta($post->ID, 'email', $_POST['email']);
 			update_post_meta($post->ID, 'main_pic', $_POST['main_pic']);
+			update_post_meta($post->ID, 'office_location', $_POST['office_location']);
+			update_post_meta($post->ID, 'office_hours', $_POST['office_hours']);
 		}
 	}
 

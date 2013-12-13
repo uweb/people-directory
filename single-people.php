@@ -23,7 +23,17 @@
 					
 						<div class="entry-content">
 							<img class='people-image' src=<?= $meta['main_pic'][0] ?> />
-							<div class='people-contact'>
+                            <?php $office_location = $meta['office_location'][0];
+                            $office_hours = $meta['office_hours'][0]; 
+                            $hours_present = false;
+                            if (!empty($office_hours)){
+                                $hours_present = true;
+                            }
+                            $location_present = false;
+                            if (!empty($office_location)){
+                                $location_present = true;
+                            } ?>
+                                <div class='people-contact<?php if ($location_present || $hours_present) { ?> big-people-contact<?php } ?>'>
 								<p class="title"><?= $meta['position'][0] ?></p>
 								<?php $teams_list = get_the_terms(get_the_ID(), 'teams');
 								if (!empty($teams_list)){
@@ -41,10 +51,16 @@
 									echo $formatted_teams;
 									?></p><?php
 								}?>
-								<div class='contact'>
+                                <div class='contact<?php if ($location_present && $hours_present) { ?> big-contact<?php } ?>'>
 									<p><b>Telephone:</b> <?= $meta['phone'][0] ?></p>
 									<?php $email = $meta['email'][0]; ?>
 									<p><b>Email:</b> <a href="mailto:<?= $email ?>"><?= $email ?></a></p>
+                                    <?php if ($location_present){
+                                        ?><p><b>Office Location:</b> <?= $office_location ?></p><?php
+                                    }
+                                    if ($hours_present){
+                                        ?><p><b>Office Hours:</b> <?= $office_hours ?></p><?php
+                                    } ?>
 								</div>
 							</div>
 							<div class="people-info">

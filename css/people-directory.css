@@ -65,15 +65,23 @@ div.people-contact .contact {
 	padding-top: 20px;
 }
 
+div.people-contact div.big-contact {
+    padding-top: 10px;
+}
+
 div.people-contact {
-	margin-top: 20px;
+	margin-top: 30px;
 	display:inline-block;
-	margin-left: 30px;
+	margin-left: 40px;
+}
+
+div.big-people-contact {
+	margin-top: 20px;
 }
 
 img.people-image {
 	display:inline-block;
-	width: 200px;
+	width: 240px;
 	float:left;
 }
 
