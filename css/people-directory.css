@@ -81,7 +81,8 @@ div.people-contact div.big-contact {
 div.people-contact {
 	margin-top: 30px;
 	display:inline-block;
-	margin-left: 40px;
+    max-width: 340px;
+	margin-left: 0px;
 }
 
 div.big-people-contact {
@@ -91,10 +92,24 @@ div.big-people-contact {
 img.people-image {
 	display:inline-block;
 	width: 240px;
+    margin-right: 40px;
+    margin-top: 10px;
 	float:left;
 }
 
 div.people-info {
 	padding-top: 30px;
 	clear: both;
+}
+
+@media (max-width: 979px) {
+    div.people-contact {
+        max-width: 100%;
+    }
+    img.people-image {
+        float: none;
+        display: block;
+        margin-right: auto;
+        margin-left: auto;
+    }
 }
