@@ -114,7 +114,7 @@ function group_by_team($people) {
 							}
 							?>
 							<div data-team='<?= $team ?>' class='profile-list searchable'>
-								<img width='75' height='100' src='<?= $main_pic ?>' alt='<?= $name ?>' />
+                                <img width='75' height='100' <?php if (empty($main_pic)) { ?> class='no-pic'<?php } ?> src='<?= $main_pic ?>' alt='<?= $name ?>' />
 								<div class='info'>
 									<?php if ($name_link){
 										?><a href="<?= get_permalink($personID) ?>"><?php

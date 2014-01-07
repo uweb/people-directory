@@ -25,6 +25,10 @@ div.profile-list img {
 	width: 80px !important;
 }
 
+div.profile-list img.no-pic {
+    opacity: 0;
+}
+
 .searchable-container > h3 {
 	border-bottom: 1px solid #E9E9E9;
 	padding-bottom: 15px;
