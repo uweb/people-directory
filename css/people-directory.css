@@ -18,10 +18,11 @@ div.span8 {
 }
 
 div.profile-list img {
+    display: block;
 	float: left;
 	margin-right: 20px;
 	margin-top: -5px;
-	width: 70px !important;
+	width: 80px !important;
 }
 
 .searchable-container > h3 {
@@ -33,6 +34,8 @@ div.profile-list img {
 }
 
 div.profile-list {
+    display: block;
+    overflow: hidden;
 	margin-bottom: 40px;
 	margin-top: 30px;
 }
@@ -44,7 +47,13 @@ div.profile-list p {
 div.profile-list h3.name {
 	font-weight: bold;
 	margin-bottom: 2px;
+    margin-top: 0px;
 	font-size: 19px;
+}
+
+div.profile-list div.info {
+    float: left;
+    clear: right;
 }
 
 div.profile-list .title, div.people-contact .title {
