@@ -22,8 +22,11 @@
 						</header><!-- .entry-header -->
 					
 						<div class="entry-content">
-							<img class='people-image' src=<?= $meta['main_pic'][0] ?> />
-                            <?php $office_location = $meta['office_location'][0];
+                            <?php $main_pic = $meta['main_pic'][0];
+                            if (!empty($main_pic)) { ?>
+							    <img class='people-image' src=<?= $main_pic ?> />
+                            <?php }
+                            $office_location = $meta['office_location'][0];
                             $office_hours = $meta['office_hours'][0]; 
                             $hours_present = false;
                             if (!empty($office_hours)){
@@ -33,7 +36,7 @@
                             if (!empty($office_location)){
                                 $location_present = true;
                             } ?>
-                                <div class='people-contact<?php if ($location_present || $hours_present) { ?> big-people-contact<?php } ?>'>
+                                <div class='people-contact<?php if ($location_present || $hours_present) { ?> big-people-contact<?php } if (empty($main_pic)) { ?> wide-people-contact<?php } ?>'>
 								<p class="title"><?= $meta['position'][0] ?></p>
 								<?php $teams_list = get_the_terms(get_the_ID(), 'teams');
 								if (!empty($teams_list)){

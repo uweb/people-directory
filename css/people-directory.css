@@ -89,6 +89,13 @@ div.big-people-contact {
 	margin-top: 20px;
 }
 
+div.wide-people-contact {
+    display: block;
+    margin-top: 40px;
+    margin-left: 20px;
+    max-width: 100%;
+}
+
 img.people-image {
 	display:inline-block;
 	width: 240px;
