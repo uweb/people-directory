@@ -2,14 +2,15 @@ div.span8 {
 	position: relative;
 }
 
-#filter {
+body #filter {
 	position: absolute;
 	top: 15px;
 	right: 0px;
 	height: 35px;
+	width: 150px;
 }
 
-#filter input {
+body #filter input {
 	border: 1px solid #F1F1F1;
 	border-radius: 20px;
 	width: 115px;
