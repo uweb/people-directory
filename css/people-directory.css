@@ -12,7 +12,7 @@ div.span8 {
 #filter input {
 	border: 1px solid #F1F1F1;
 	border-radius: 20px;
-	width: 85px;
+	width: 115px;
 	padding-left: 15px;
 	color: #949494;
 }
@@ -113,6 +113,24 @@ div.people-info {
 	clear: both;
 }
 
+
+/* Single page */
+
+
+.single-people .contact p {
+	margin-bottom: 5px;
+}
+.single-people p.team {
+	margin-bottom: 0;
+}
+.single-people div.people-contact {
+	margin-top: 50px;
+	margin-left: 30px;
+}
+.single-people div.people-info {
+	padding-top: 40px;
+}
+
 @media (max-width: 979px) {
     div.people-contact {
         max-width: 100%;
@@ -123,4 +141,10 @@ div.people-info {
         margin-right: auto;
         margin-left: auto;
     }
+	.single-people div.people-contact {
+		margin-left: 0;
+	}
+	.single-people h1 {
+		margin-left: -25px;
+	}
 }
