@@ -14,13 +14,7 @@
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 						<?php $meta = get_post_meta(get_the_ID()); ?>
 
-						<header class="entry-header">
-							<?php $title = get_the_title();
-							if (!empty($title)): ?>
-							<h1 class="entry-title"><?= $title ?></h1>
-							<?php endif; ?>
-						</header><!-- .entry-header -->
-					
+							
 						<div class="entry-content">
                             <?php $main_pic = $meta['main_pic'][0];
                             if (!empty($main_pic)) { ?>
@@ -37,6 +31,13 @@
                                 $location_present = true;
                             } ?>
                                 <div class='people-contact<?php if ($location_present || $hours_present) { ?> big-people-contact<?php } if (empty($main_pic)) { ?> wide-people-contact<?php } ?>'>
+                                
+                                <?php $title = get_the_title();
+							if (!empty($title)): ?>
+							<h1><?= $title ?></h1>
+							<?php endif; ?>
+					
+                                
 								<p class="title"><?= $meta['position'][0] ?></p>
 								<?php $teams_list = get_the_terms(get_the_ID(), 'teams');
 								if (!empty($teams_list)){
