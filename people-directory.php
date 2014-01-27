@@ -68,17 +68,55 @@ if ( ! post_type_exists( 'people' ) ):
 		register_post_type('people', $args);
 	}
 
-	add_action('admin_init', 'single_people_post_option');
+	add_action('admin_init', 'people_post_options');
 
-	function single_people_post_option() {
-		register_setting('reading', 'people_visible_setting');
+	function people_post_options() {
+        //add_settings_section('people', 'People', 'people_settings_callback', 'general');
 
-		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'reading');
+		register_setting('general', 'people_visible_setting');
 
-		function people_visible_setting_callback() {
-			echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
-		}
+		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'general');
+
+		register_setting('general', 'people_priority_people');
+
+		add_settings_field('people_priority_people', 'Choose Priority People', 'people_priority_people_callback', 'general');
+
 	}
+
+    /*  this is the callback for the in-progress section
+     *  function people_settings_callback() {
+     *      echo '<p>These are the settings for the people directory plugin</p>';
+     *  } */
+
+    function people_visible_setting_callback() {
+        echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
+    }
+
+    function people_priority_people_callback() {
+        $people = get_posts(array('posts_per_page' => -1, 'post_type' => 'people'));
+        ?><p>You can choose up to 5 people to float to the top of the directory:</p>
+        <?php
+        $option = get_option('people_priority_people');
+        for ($i = 1; $i <= 5; $i++){
+                ?>
+                <select name='people_priority_people[<?= $i ?>]' value='<?= $option[$i] ?>'/>
+                <option value='false'>----</option>
+                <?php
+                foreach ($people as $person) {
+                    $selected = false;
+                    $personName = $person->post_title;
+                    if ($option[$i] == $personName){
+                        $selected = true;
+                    }
+                    ?>
+                    <option value='<?= $personName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $personName ?></option>
+                    <?php
+                }
+                ?>
+                </select>
+            <?php
+        }
+    }
 
 	add_action('admin_init', 'people_admin_init');
 
