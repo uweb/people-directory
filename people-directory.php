@@ -257,8 +257,13 @@ if ( ! post_type_exists( 'people' ) ):
 
 	function add_people_directory_template($template) {
 		$this_dir = dirname(__FILE__);
+        $custom_page = get_option('people_directory_page_setting');
+        $is_directory = is_page('people_directory') || is_page('faculty-directory') || is_page('people-directory');
+        if ($custom_page != "") {
+            $is_directory = ($is_directory || is_page(get_option('people_directory_page_setting')));
+        }
 		$people_directory_template = 'people-directory-template.php';
-		if (is_page('people_directory') || is_page('faculty-directory') || is_page('people-directory') || is_page(get_option('people_directory_page_setting'))) {
+		if ($is_directory) {
 			if (file_exists(get_stylesheet_directory() . '/' . $people_directory_template)) {
 				return get_stylesheet_directory() . '/' . $people_directory_template;
 			}
