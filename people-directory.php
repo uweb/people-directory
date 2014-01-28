@@ -77,13 +77,17 @@ if ( ! post_type_exists( 'people' ) ):
 
 		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'general');
 
+		register_setting('general', 'people_directory_page_setting');
+
+		add_settings_field('people_directory_page_setting', 'Enter the slug of your people directory:', 'people_directory_page_setting_callback', 'general');
+
 		register_setting('general', 'people_priority_people');
 
-		add_settings_field('people_priority_people', 'Choose Priority People', 'people_priority_people_callback', 'general');
+		add_settings_field('people_priority_people', 'People to float to the top of lists:', 'people_priority_people_callback', 'general');
 
 		register_setting('general', 'people_priority_team');
 
-		add_settings_field('people_priority_team', 'Choose Priority Team', 'people_priority_team_callback', 'general');
+		add_settings_field('people_priority_team', 'Team that displays first in directory:', 'people_priority_team_callback', 'general');
 	}
 
     /*  this is the callback for the in-progress section
@@ -95,10 +99,15 @@ if ( ! post_type_exists( 'people' ) ):
         echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
     }
 
+    function people_directory_page_setting_callback() {
+        $slug = get_option('people_directory_page_setting');
+        ?>
+        <input name='people_directory_page_setting' type='text' value='<?= $slug ?>'/>
+        <?php
+    }
+
     function people_priority_people_callback() {
         $people = get_posts(array('posts_per_page' => -1, 'post_type' => 'people'));
-        ?><p>You can choose up to 5 people to float to the top of the directory:</p>
-        <?php
         $option = get_option('people_priority_people');
         for ($i = 1; $i <= 5; $i++){
                 ?>
@@ -125,7 +134,6 @@ if ( ! post_type_exists( 'people' ) ):
         $teams = get_terms('teams');
         $option = get_option('people_priority_team');
         ?>
-        <p>Choose a team/group to be displayed first in the directory:</p>
         <select name='people_priority_team'/>
         <option value='false'>----</option>
         <?php
@@ -250,7 +258,7 @@ if ( ! post_type_exists( 'people' ) ):
 	function add_people_directory_template($template) {
 		$this_dir = dirname(__FILE__);
 		$people_directory_template = 'people-directory-template.php';
-		if (is_page('people_directory') || is_page('faculty-directory') || is_page('people-directory')) {
+		if (is_page('people_directory') || is_page('faculty-directory') || is_page('people-directory') || is_page(get_option('people_directory_page_setting'))) {
 			if (file_exists(get_stylesheet_directory() . '/' . $people_directory_template)) {
 				return get_stylesheet_directory() . '/' . $people_directory_template;
 			}
