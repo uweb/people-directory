@@ -29,7 +29,7 @@ function last_name_sort($a, $b) {
 
 //this function groups people by team.  The teams are in the order they come up excpet for when manually ordered
 function group_by_team($people) {
-	$priority_team = 'Leadership';	//this is the name of a team you want to float to the top
+	$priority_team = get_option('people_priority_team');	//this is the name of a team you want to float to the top
 	$team_groups = array($priority_team => array());
 	$team_no_team = array();
 	foreach ($people as $person) {

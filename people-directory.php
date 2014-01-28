@@ -81,6 +81,9 @@ if ( ! post_type_exists( 'people' ) ):
 
 		add_settings_field('people_priority_people', 'Choose Priority People', 'people_priority_people_callback', 'general');
 
+		register_setting('general', 'people_priority_team');
+
+		add_settings_field('people_priority_team', 'Choose Priority Team', 'people_priority_team_callback', 'general');
 	}
 
     /*  this is the callback for the in-progress section
@@ -116,6 +119,29 @@ if ( ! post_type_exists( 'people' ) ):
                 </select>
             <?php
         }
+    }
+
+    function people_priority_team_callback() {
+        $teams = get_terms('teams');
+        $option = get_option('people_priority_team');
+        ?>
+        <p>Choose a team/group to be displayed first in the directory:</p>
+        <select name='people_priority_team'/>
+        <option value='false'>----</option>
+        <?php
+        foreach ($teams as $team) {
+            $selected = false;
+            $catName = $team->name;
+            if ($option == $catName){
+                $selected = true;
+            }
+            ?>
+            <option value='<?= $catName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $catName ?></option>
+            <?php
+        }
+        ?>
+        </select>
+        <?php
     }
 
 	add_action('admin_init', 'people_admin_init');
