@@ -4,7 +4,7 @@
 	Plugin Name: People Directory
 	Plugin URI: http://www.washington.edu
 	Description: Makes a people content type and directory template
-	Version: 1.0
+	Version: 1.1
 	Author: Jon Swanson
 	*/
 
@@ -68,32 +68,51 @@ if ( ! post_type_exists( 'people' ) ):
 		register_post_type('people', $args);
 	}
 
-	add_action('admin_init', 'people_post_options');
+    add_action('admin_menu', 'people_settings_page');
+    add_action('admin_init', 'people_post_options');
+
+    function people_settings_page() {
+        add_settings_section('people', 'The following settings affect the People Directory plugin only', 'people_settings_callback', 'people_settings');
+        add_options_page('People Directory Settings', 'People Directory', 'manage_options', 'people_settings', 'people_settings_page_callback');
+    }
+
+    function people_settings_callback() {
+        //nothing doing
+        return;
+    }
+
+    function people_settings_page_callback() {
+        ?>
+        <div class='wrap'>
+            <h2>People Directory Settings</h2>
+            <form method='post' action='options.php'>
+                <?php 
+                settings_fields('people');
+                do_settings_sections('people_settings');
+                submit_button();
+                ?>
+            </form>
+        </div>
+        <?php
+    }
 
 	function people_post_options() {
-        //add_settings_section('people', 'People', 'people_settings_callback', 'general');
+		register_setting('people', 'people_visible_setting');
 
-		register_setting('general', 'people_visible_setting');
+		add_settings_field('people_visible_setting', 'Make Single People Pages?', 'people_visible_setting_callback', 'people_settings', 'people');
 
-		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'general');
+		register_setting('people', 'people_directory_page_setting');
 
-		register_setting('general', 'people_directory_page_setting');
+		add_settings_field('people_directory_page_setting', 'Enter the slug of your people directory:', 'people_directory_page_setting_callback', 'people_settings', 'people');
 
-		add_settings_field('people_directory_page_setting', 'Enter the slug of your people directory:', 'people_directory_page_setting_callback', 'general');
+		register_setting('people', 'people_priority_people');
 
-		register_setting('general', 'people_priority_people');
+		add_settings_field('people_priority_people', 'Choose up to 5 people to float to the top of lists:', 'people_priority_people_callback', 'people_settings', 'people');
 
-		add_settings_field('people_priority_people', 'People to float to the top of lists:', 'people_priority_people_callback', 'general');
+		register_setting('people', 'people_priority_team');
 
-		register_setting('general', 'people_priority_team');
-
-		add_settings_field('people_priority_team', 'Team that displays first in directory:', 'people_priority_team_callback', 'general');
+		add_settings_field('people_priority_team', 'Choose a team to display first in directory:', 'people_priority_team_callback', 'people_settings', 'people');
 	}
-
-    /*  this is the callback for the in-progress section
-     *  function people_settings_callback() {
-     *      echo '<p>These are the settings for the people directory plugin</p>';
-     *  } */
 
     function people_visible_setting_callback() {
         echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
@@ -111,21 +130,23 @@ if ( ! post_type_exists( 'people' ) ):
         $option = get_option('people_priority_people');
         for ($i = 1; $i <= 5; $i++){
                 ?>
-                <select name='people_priority_people[<?= $i ?>]' value='<?= $option[$i] ?>'/>
-                <option value='false'>----</option>
-                <?php
-                foreach ($people as $person) {
-                    $selected = false;
-                    $personName = $person->post_title;
-                    if ($option[$i] == $personName){
-                        $selected = true;
+                <p><?= $i ?>) 
+                    <select name='people_priority_people[<?= $i ?>]' value='<?= $option[$i] ?>'/>
+                    <option value='false'>----</option>
+                    <?php
+                    foreach ($people as $person) {
+                        $selected = false;
+                        $personName = $person->post_title;
+                        if ($option[$i] == $personName){
+                            $selected = true;
+                        }
+                        ?>
+                        <option value='<?= $personName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $personName ?></option>
+                        <?php
                     }
                     ?>
-                    <option value='<?= $personName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $personName ?></option>
-                    <?php
-                }
-                ?>
-                </select>
+                    </select>
+                </p>
             <?php
         }
     }
