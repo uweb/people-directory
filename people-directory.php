@@ -121,7 +121,7 @@ if ( ! post_type_exists( 'people' ) ):
     function people_directory_page_setting_callback() {
         $slug = get_option('people_directory_page_setting');
         ?>
-        <input name='people_directory_page_setting' type='text' value='<?= $slug ?>'/>
+        <input name='people_directory_page_setting' type='text' value='<?= $slug ?>'/> (default slugs: people-directory and faculty-directory)
         <?php
     }
 
