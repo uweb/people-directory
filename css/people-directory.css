@@ -11,7 +11,7 @@ body #filter {
 }
 
 body #filter input {
-	border: 1px solid #F1F1F1;
+	border: 1px solid #DFDFDF;
 	border-radius: 20px;
 	width: 115px;
 	padding-left: 15px;
@@ -147,5 +147,17 @@ div.people-info {
 	}
 	.single-people h1 {
 		margin-left: -25px;
+	}
+}
+@media (max-width: 767px) {
+   	div.profile-list div.info {
+    	max-width: 235px;
+	}
+	article > div {
+		padding: 0 20px;
+	}
+	body #filter {
+		margin: 0;
+		top: 0;
 	}
 }
