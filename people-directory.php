@@ -4,7 +4,7 @@
 	Plugin Name: People Directory
 	Plugin URI: http://www.washington.edu
 	Description: Makes a people content type and directory template
-	Version: 1.0
+	Version: 1.1
 	Author: Jon Swanson
 	*/
 
@@ -68,17 +68,110 @@ if ( ! post_type_exists( 'people' ) ):
 		register_post_type('people', $args);
 	}
 
-	add_action('admin_init', 'single_people_post_option');
+    add_action('admin_menu', 'people_settings_page');
+    add_action('admin_init', 'people_post_options');
 
-	function single_people_post_option() {
-		register_setting('reading', 'people_visible_setting');
+    function people_settings_page() {
+        add_settings_section('people', 'The following settings affect the People Directory plugin only', 'people_settings_callback', 'people_settings');
+        add_options_page('People Directory Settings', 'People Directory', 'manage_options', 'people_settings', 'people_settings_page_callback');
+    }
 
-		add_settings_field('people_visible_setting', 'Make Single People Pages', 'people_visible_setting_callback', 'reading');
+    function people_settings_callback() {
+        //nothing doing
+        return;
+    }
 
-		function people_visible_setting_callback() {
-			echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
-		}
+    function people_settings_page_callback() {
+        ?>
+        <div class='wrap'>
+            <h2>People Directory Settings</h2>
+            <form method='post' action='options.php'>
+                <?php 
+                settings_fields('people');
+                do_settings_sections('people_settings');
+                submit_button();
+                ?>
+            </form>
+        </div>
+        <?php
+    }
+
+	function people_post_options() {
+		register_setting('people', 'people_visible_setting');
+
+		add_settings_field('people_visible_setting', 'Make Single People Pages?', 'people_visible_setting_callback', 'people_settings', 'people');
+
+		register_setting('people', 'people_directory_page_setting');
+
+		add_settings_field('people_directory_page_setting', 'Enter the slug of your people directory:', 'people_directory_page_setting_callback', 'people_settings', 'people');
+
+		register_setting('people', 'people_priority_people');
+
+		add_settings_field('people_priority_people', 'Choose up to 5 people to float to the top of lists:', 'people_priority_people_callback', 'people_settings', 'people');
+
+		register_setting('people', 'people_priority_team');
+
+		add_settings_field('people_priority_team', 'Choose a team to display first in directory:', 'people_priority_team_callback', 'people_settings', 'people');
 	}
+
+    function people_visible_setting_callback() {
+        echo "<input name='people_visible_setting' type='checkbox' value='1'" . checked( 1, get_option('people_visible_setting'), false) . "/> (yes if checked)";
+    }
+
+    function people_directory_page_setting_callback() {
+        $slug = get_option('people_directory_page_setting');
+        ?>
+        <input name='people_directory_page_setting' type='text' value='<?= $slug ?>'/> (default slugs: people-directory and faculty-directory)
+        <?php
+    }
+
+    function people_priority_people_callback() {
+        $people = get_posts(array('posts_per_page' => -1, 'post_type' => 'people'));
+        $option = get_option('people_priority_people');
+        for ($i = 1; $i <= 5; $i++){
+                ?>
+                <p><?= $i ?>) 
+                    <select name='people_priority_people[<?= $i ?>]' value='<?= $option[$i] ?>'/>
+                    <option value='false'>----</option>
+                    <?php
+                    foreach ($people as $person) {
+                        $selected = false;
+                        $personName = $person->post_title;
+                        if ($option[$i] == $personName){
+                            $selected = true;
+                        }
+                        ?>
+                        <option value='<?= $personName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $personName ?></option>
+                        <?php
+                    }
+                    ?>
+                    </select>
+                </p>
+            <?php
+        }
+    }
+
+    function people_priority_team_callback() {
+        $teams = get_terms('teams');
+        $option = get_option('people_priority_team');
+        ?>
+        <select name='people_priority_team'/>
+        <option value='false'>----</option>
+        <?php
+        foreach ($teams as $team) {
+            $selected = false;
+            $catName = $team->name;
+            if ($option == $catName){
+                $selected = true;
+            }
+            ?>
+            <option value='<?= $catName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $catName ?></option>
+            <?php
+        }
+        ?>
+        </select>
+        <?php
+    }
 
 	add_action('admin_init', 'people_admin_init');
 
@@ -185,8 +278,13 @@ if ( ! post_type_exists( 'people' ) ):
 
 	function add_people_directory_template($template) {
 		$this_dir = dirname(__FILE__);
+        $custom_page = get_option('people_directory_page_setting');
+        $is_directory = is_page('people_directory') || is_page('faculty-directory') || is_page('people-directory');
+        if ($custom_page != "") {
+            $is_directory = ($is_directory || is_page(get_option('people_directory_page_setting')));
+        }
 		$people_directory_template = 'people-directory-template.php';
-		if (is_page('people_directory') || is_page('faculty-directory') || is_page('people-directory')) {
+		if ($is_directory) {
 			if (file_exists(get_stylesheet_directory() . '/' . $people_directory_template)) {
 				return get_stylesheet_directory() . '/' . $people_directory_template;
 			}
