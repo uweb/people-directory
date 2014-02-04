@@ -26,6 +26,20 @@ div.profile-list img {
 	width: 80px !important;
 }
 
+/* Temp hide for marketing pics */
+
+.site-marketing div.profile-list img {
+    display: none;
+}
+
+.site-marketing .entry-content img {
+	display: none;
+}
+.site-marketing.single-people div.people-contact {
+	margin-top: 10px;
+}
+
+
 div.profile-list img.no-pic {
     opacity: 0;
 }
@@ -104,7 +118,7 @@ div.wide-people-contact {
 img.people-image {
 	display:inline-block;
 	width: 240px;
-    margin-right: 40px;
+    margin-right: 70px;
     margin-top: 10px;
 	float:left;
 }
@@ -126,7 +140,6 @@ div.people-info {
 }
 .single-people div.people-contact {
 	margin-top: 50px;
-	margin-left: 30px;
 }
 .single-people div.people-info {
 	padding-top: 40px;
