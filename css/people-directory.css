@@ -32,7 +32,7 @@ div.profile-list img {
     display: none;
 }
 
-.site-marketing .entry-content img {
+.site-marketing .entry-content img.people-image {
 	display: none;
 }
 .site-marketing.single-people div.people-contact {
