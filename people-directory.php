@@ -283,7 +283,12 @@ if ( ! post_type_exists( 'people' ) ):
         if ($custom_page != "") {
             $is_directory = ($is_directory || is_page(get_option('people_directory_page_setting')));
         }
-		$people_directory_template = 'people-directory-template.php';
+        if (wp_get_theme() == 'UW 2014') {
+            $people_directory_template = 'people-directory-template-2014.php';
+        }
+        else {
+		    $people_directory_template = 'people-directory-template.php';
+        }
 		if ($is_directory) {
 			if (file_exists(get_stylesheet_directory() . '/' . $people_directory_template)) {
 				return get_stylesheet_directory() . '/' . $people_directory_template;
