@@ -6,11 +6,11 @@ Template Name: People Directory
 //helper functions
 //this function sorts two people by last name, except for some manually ordered people
 function last_name_sort($a, $b) {
-	$name_priority = get_option('people_priority_people'); //put names you want at the top of the teams here
+	$name_priority = get_option('people_priority_people', array()); //put names you want at the top of the teams here
 	$first = $a->post_title;
 	$second = $b->post_title;
-	$first_index = array_search($first, $name_priority);	
-	$second_index = array_search($second, $name_priority);	
+	$first_index = array_search($first, $name_priority);
+	$second_index = array_search($second, $name_priority);
 	if ($first_index) {
 		if ($second_index) {
 			return strcmp($first_index, $second_index);
@@ -27,7 +27,7 @@ function last_name_sort($a, $b) {
 	return strcmp($first[sizeof($first) - 1], $second[sizeof($second) - 1]);
 }
 
-//this function groups people by team.  The teams are in the order they come up excpet for when manually ordered
+//this function groups people by team.  The teams are in the order they come up except for when manually ordered
 function group_by_team($people) {
 	$priority_team = get_option('people_priority_team');	//this is the name of a team you want to float to the top
 	$team_groups = array($priority_team => array());
@@ -62,11 +62,11 @@ function group_by_team($people) {
 
 <?php get_header(); ?>
 <div id="primary">
-	<div id="content" role="main" class="container team-page">		
+	<div id="content" role="main" class="container team-page">
 		<div class="row show-grid">
-			<div class="span8">			
+			<div class="span8">
       			<span id="arrow-mark" <?php the_blogroll_banner_style(); ?> ></span>
-				
+
       			<?php uw_breadcrumbs(); ?>
 
 				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -77,7 +77,7 @@ function group_by_team($people) {
 					<div id="filter">
 						<input id='livesearch' type="search" name="filter" value="Search">
 					</div>
-					
+
 					<?php
 					$args = array('post_type' => 'people', 'posts_per_page' => -1);
 					$query = new WP_Query($args);
@@ -94,7 +94,7 @@ function group_by_team($people) {
 				else {
 					$name_link = false;
 				}
-				$teams = group_by_team($people); 
+				$teams = group_by_team($people);
 				foreach($teams as $team => $people):
 					if (count($people) != 0): 	//just in case there are zero people in a manually specified team (or Team No-Team) ?>
 						<div id='<?= $team ?>' class='searchable-container'><h3><?= $team ?></h3>
@@ -137,7 +137,7 @@ function group_by_team($people) {
 			</article>
 		</div>
 		<div id="secondary" class="span4 right-bar" role="complementary">
-			<div class="stripe-top"></div><div class="stripe-bottom"></div>				
+			<div class="stripe-top"></div><div class="stripe-bottom"></div>
 				<div id="sidebar">
 				<?php if (is_active_sidebar('homepage-sidebar') && is_front_page()) : dynamic_sidebar('homepage-sidebar'); else: dynamic_sidebar('sidebar'); endif; ?>
 				</div>
