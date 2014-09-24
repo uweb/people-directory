@@ -62,7 +62,7 @@ function group_by_team($people) {
 
 <?php get_header(); ?>
 				
-<div class="uw-hero-image"></div>
+<?php get_template_part( 'header', 'image' ); ?>
 
 <div class="container uw-body">
 
