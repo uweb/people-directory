@@ -283,7 +283,7 @@ if ( ! post_type_exists( 'people' ) ):
         if ($custom_page != "") {
             $is_directory = ($is_directory || is_page(get_option('people_directory_page_setting')));
         }
-        if (wp_get_theme() == 'UW 2014') {
+        if (wp_get_theme() != 'UW 2013') {
             $people_directory_template = 'people-directory-template-2014.php';
         }
         else {
