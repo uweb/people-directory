@@ -269,9 +269,12 @@ if ( ! post_type_exists( 'people' ) ):
 			else if (file_exists(get_template_directory() . '/' . $single_person_template)) {
 				return get_template_directory() . '/' . $single_person_template;
 			}
-			else { 
+            if (wp_get_theme() == 'UW 2013') {
 				return $this_dir . '/' . $single_person_template;
 			}
+            else {
+                return $this_dir . '/' . 'single-people-2014.php';
+            }
 		}
         return $template;
 	}
