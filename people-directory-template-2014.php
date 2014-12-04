@@ -16,8 +16,8 @@ include 'template_functions.php';
   <div class="row">
 
     <div class="col-md-8 uw-content" role='main'>
-
-      <a href="<?php echo home_url('/'); ?>" title="<?php echo esc_attr( get_bloginfo() ) ?>"><h2 class="uw-site-title"><?php bloginfo(); ?></h2></a>
+ 
+      <?php uw_site_title(); ?>
 
       <?php get_template_part( 'breadcrumbs' ); ?>
 
@@ -29,7 +29,7 @@ include 'template_functions.php';
           ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <header class="entry-header">
-                    <h1 class="entry-title"><?php echo apply_filters('italics', get_the_title()); ?></h1>
+                    <h1 class="entry-title"><?= get_the_title(); ?></h1>
                 </header><!-- .entry-header -->
 
                 <div id="filter">
