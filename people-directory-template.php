@@ -45,7 +45,7 @@ include 'template_functions.php';
 				$teams = group_by_team($people);
 				foreach($teams as $team => $people):
 					if (count($people) != 0): 	//just in case there are zero people in a manually specified team (or Team No-Team) ?>
-						<div id='<?= $team ?>' class='searchable-container'><h3><?= $team ?></h3>
+						<div id='<?php echo $team ?>' class='searchable-container'><h3><?php echo $team ?></h3>
 						<?php foreach ($people as $person):
 							$personID = $person->ID;
 							$name = $person->post_title;
@@ -61,20 +61,20 @@ include 'template_functions.php';
 								}
 							}
 							?>
-							<div data-team='<?= $team ?>' class='profile-list searchable'>
-                                <img width='75' height='100' <?php if (empty($main_pic)) { ?> class='no-pic'<?php } ?> src='<?= $main_pic ?>' alt='<?= $name ?>' />
+							<div data-team='<?php echo $team ?>' class='profile-list searchable'>
+                                <img width='75' height='100' <?php if (empty($main_pic)) { ?> class='no-pic'<?php } ?> src='<?php echo $main_pic ?>' alt='<?php echo $name ?>' />
 								<div class='info'>
 									<?php if ($name_link){
-										?><a href="<?= get_permalink($personID) ?>"><?php
+										?><a href="<?php echo get_permalink($personID) ?>"><?php
 									} ?>
-									<h3 class='name search-this'><?= $name ?></h3>
+									<h3 class='name search-this'><?php echo $name ?></h3>
 									<?php if ($name_link){
 										?></a><?php
 									}?>
-									<p class='title search-this'><?= $position ?></p>
-									<p class='hidden search-this'><?= $person_teams ?></p>
-									<p><b>Telephone:</b> <?= $phone ?></p>
-									<p><b>Email:</b> <a href="mailto:<?= $email ?>"><?= $email ?></a></p>
+									<p class='title search-this'><?php echo $position ?></p>
+									<p class='hidden search-this'><?php echo $person_teams ?></p>
+									<p><b>Telephone:</b> <?php echo $phone ?></p>
+									<p><b>Email:</b> <a href="mailto:<?php echo $email ?>"><?php echo $email ?></a></p>
 								</div>
 							</div>
 						<?php endforeach; ?>
