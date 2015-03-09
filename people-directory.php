@@ -5,7 +5,7 @@
 	Plugin URI: http://www.washington.edu
 	Description: Makes a people content type and directory template
 	Version: 1.1
-	Author: Jon Swanson
+	Author: UW Web Team
 	*/
 
 if (!defined('PEOPLE_DIRECTORY')){
