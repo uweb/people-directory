@@ -5,7 +5,7 @@
 	Plugin URI: http://www.washington.edu
 	Description: Makes a people content type and directory template
 	Version: 1.1
-	Author: Jon Swanson
+	Author: UW Web Team
 	*/
 
 if (!defined('PEOPLE_DIRECTORY')){
@@ -121,7 +121,7 @@ if ( ! post_type_exists( 'people' ) ):
     function people_directory_page_setting_callback() {
         $slug = get_option('people_directory_page_setting');
         ?>
-        <input name='people_directory_page_setting' type='text' value='<?= $slug ?>'/> (default slugs: people-directory and faculty-directory)
+        <input name='people_directory_page_setting' type='text' value='<?php echo $slug ?>'/> (default slugs: people-directory and faculty-directory)
         <?php
     }
 
@@ -130,8 +130,8 @@ if ( ! post_type_exists( 'people' ) ):
         $option = get_option('people_priority_people');
         for ($i = 1; $i <= 5; $i++){
                 ?>
-                <p><?= $i ?>) 
-                    <select name='people_priority_people[<?= $i ?>]' value='<?= $option[$i] ?>'/>
+                <p><?php echo $i ?>) 
+                    <select name='people_priority_people[<?php echo $i ?>]' value='<?php echo $option[$i] ?>'/>
                     <option value='false'>----</option>
                     <?php
                     foreach ($people as $person) {
@@ -141,7 +141,7 @@ if ( ! post_type_exists( 'people' ) ):
                             $selected = true;
                         }
                         ?>
-                        <option value='<?= $personName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $personName ?></option>
+                        <option value='<?php echo $personName ?>'<?php if ($selected) { ?> selected<?php } ?>><?php echo $personName ?></option>
                         <?php
                     }
                     ?>
@@ -165,7 +165,7 @@ if ( ! post_type_exists( 'people' ) ):
                 $selected = true;
             }
             ?>
-            <option value='<?= $catName ?>'<?php if ($selected) { ?> selected<?php } ?>><?= $catName ?></option>
+            <option value='<?php echo $catName ?>'<?php if ($selected) { ?> selected<?php } ?>><?php echo $catName ?></option>
             <?php
         }
         ?>
@@ -187,21 +187,21 @@ if ( ! post_type_exists( 'people' ) ):
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$position = $custom['position'][0];
-		?><input name="position" value="<?= $position ?>" /><?php
+		?><input name="position" value="<?php echo $position ?>" /><?php
 	}
 
 	function phone_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$phone = $custom['phone'][0];
-		?><input name="phone" value="<?= $phone ?>" /><?php
+		?><input name="phone" value="<?php echo $phone ?>" /><?php
 	}
 
 	function email_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$email = $custom['email'][0];
-		?><input name="email" value="<?= $email ?> " /><?php
+		?><input name="email" value="<?php echo $email ?> " /><?php
 	}
 
 	function office_details_callback() {
@@ -215,7 +215,7 @@ if ( ! post_type_exists( 'people' ) ):
 		?><label style='display:block'>Office Location:</label>
 		<input name='office_location' style='width:98%' <?php
 		if (!empty($office_location)) {
-			?>value='<?= $office_location ?>' <?php
+			?>value='<?php echo $office_location ?>' <?php
 		}
         $office_hours = $custom['office_hours'];
         if (!empty($office_hours)) {
@@ -224,7 +224,7 @@ if ( ! post_type_exists( 'people' ) ):
 		?><label style='display:block'>Office Hours:</label>
 		<input name='office_hours' style='width:98%' <?php
 		if (!empty($office_hours)) {
-			?>value='<?= $office_hours ?>' <?php
+			?>value='<?php echo $office_hours ?>' <?php
 		}
 		?>/><?php
 	}
@@ -234,9 +234,9 @@ if ( ! post_type_exists( 'people' ) ):
 		$custom = get_post_custom($post->ID);
 		$pic_url = $custom['main_pic'][0];
 		?><p>Use the Add Media button above to the image upload or select from uploaded images. The field below accepts an image url, so enter the generated url here (or if you want to use an image not hosted here, just enter the url for that image).</p><?php
-		?><input style='width:99%' name="main_pic" value="<?= $pic_url ?>" /><?php
+		?><input style='width:99%' name="main_pic" value="<?php echo $pic_url ?>" /><?php
 		if (!empty($pic_url)) {
-			?><img src="<?= $pic_url ?>" height=300 width=225 style='display:block;margin:auto'/><?php
+			?><img src="<?php echo $pic_url ?>" height=300 width=225 style='display:block;margin:auto'/><?php
 		}
 		else {
 			?><p>no image currently selected</p><?php
@@ -269,9 +269,12 @@ if ( ! post_type_exists( 'people' ) ):
 			else if (file_exists(get_template_directory() . '/' . $single_person_template)) {
 				return get_template_directory() . '/' . $single_person_template;
 			}
-			else { 
+            if (wp_get_theme() == 'UW 2013') {
 				return $this_dir . '/' . $single_person_template;
 			}
+            else {
+                return $this_dir . '/' . 'single-people-2014.php';
+            }
 		}
         return $template;
 	}
@@ -283,7 +286,7 @@ if ( ! post_type_exists( 'people' ) ):
         if ($custom_page != "") {
             $is_directory = ($is_directory || is_page(get_option('people_directory_page_setting')));
         }
-        if (wp_get_theme() == 'UW 2014') {
+        if (wp_get_theme() != 'UW 2013') {
             $people_directory_template = 'people-directory-template-2014.php';
         }
         else {
