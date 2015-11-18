@@ -86,8 +86,8 @@ include 'template_functions.php';
                                 ?>
                                 <p class='title search-this'><?php echo $position ?></p>
                                 <p class='hidden search-this'><?php echo $person_teams ?></p>
-                                <p><b>Telephone:</b> <?php echo $phone ?></p>
-                                <p><b>Email:</b> <a href="mailto:<?php echo $email ?>"><?php echo $email ?></a></p>
+                                <?php if ($phone){ ?> <p><b>Telephone:</b> <?php echo $phone ?></p> <?php } ?>
+                                <?php if (trim($email)){ ?> <p><b>Email:</b> <a href="mailto:<?php echo $email ?>"><?php echo $email ?></a></p> <?php } ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
