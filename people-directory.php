@@ -201,7 +201,7 @@ if ( ! post_type_exists( 'people' ) ):
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$email = $custom['email'][0];
-		?><input name="email" value="<?php echo $email ?> " /><?php
+		?><input name="email" value="<?php echo $email ?>" /><?php
 	}
 
 	function office_details_callback() {
@@ -347,5 +347,81 @@ function load_other_resources() {
 	wp_enqueue_script('live-search');
 	wp_register_style('directory-style', plugins_url('css/people-directory.css', __FILE__));
 	wp_enqueue_style('directory-style');
+	add_shortcode( 'directory', 'shortcode' );
 }
+
+// [directory team="null"]
+function shortcode( $atts )
+  {
+	include 'template_functions.php';
+
+	 $atts = (object) shortcode_atts( array(
+	    'team' => null,
+	 ), $atts);
+
+	 $args = array('post_type' => 'people', 'posts_per_page' => -1);
+	    $query = new WP_Query($args);
+	    $people = $query->get_posts();
+
+	    $array = array();
+	    foreach($people as $person){
+	    	$name = $person->post_title;
+	    	$name = explode(" ", $name);
+	    	if (substr($name[1], 1, 1) == "."){
+	    		$last = $name[2];
+	    	} else {
+	    		$last = $name[1];
+	    	}
+	    	$array[$last] =  $person;
+	    }
+	    ksort($array);
+	    $return = '';
+	    foreach($array as $person){
+	    	$personteam = get_the_terms($person->ID, 'teams'); 
+	    	$teams = array();
+	    	foreach($personteam as $team){
+	    		$teams[] = strtolower($team->name);
+	    	}
+	    	if($atts->team == null || in_array(strtolower($atts->team), $teams)){ // || $personteam == $atts->team){
+	    		$personID = $person->ID;
+                $name = $person->post_title;
+                $main_pic = get_post_meta($personID, 'main_pic', true);
+                $position = get_post_meta($personID, 'position', true);
+                $phone = get_post_meta($personID, 'phone', true);
+                $email = get_post_meta($personID, 'email', true);
+                $person_teams = implode(' ', $teams);
+
+	    		$return .= "<div class='profile-list searchable'>" . 
+	                            "<img width='75' height='100' "; 
+					            if (empty($main_pic)) { 
+					            	$return .= "class='no-pic'"; 
+					            }  
+					            $return .= "src='" . $main_pic ."' alt='" . $name . "' />" .
+	                            	"<div class='info'>";
+	                                if (get_option('people_visible_setting')){
+	                                    $return .= "<a href='" . get_permalink($personID) . "'>";
+	                               	} 
+	                                $return .= "<h3 class='name search-this'>" . $name . "</h3>";
+	                                if (get_option('people_visible_setting')){
+	                                    $return .= "</a>";
+	                                }
+	                                $return .= "<p class='title search-this'>" . $position . "</p>" .
+	                                	"<p class='hidden search-this'>" . $person_teams . "</p>";
+	                                if ($phone){  
+	                                	$return .= "<p><b>Telephone:</b>" . $phone . "</p>";
+	                                } 
+	                                if (trim($email)){ 
+	                                	$return .= "<p><b>Email:</b> <a href='mailto:" . $email . "'>" . $email . "</a></p>";
+	                                } 
+	                            $return .= "</div>" .
+	                        "</div>";
+	    	}
+	    }
+
+    return $return; 
+
+
+  }
+
+
 ?>
