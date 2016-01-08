@@ -52,7 +52,8 @@ include 'template_functions.php';
             else {
                 $name_link = false;
             }
-            $teams = group_by_team($people); 
+            $teams = group_by_team($people);
+            ksort($teams);
             foreach($teams as $team => $people):
                 if (count($people) != 0): 	//just in case there are zero people in a manually specified team (or Team No-Team) ?>
                     <div id='<?php echo $team; ?>' class='searchable-container'><h3><?php echo $team; ?></h3>
