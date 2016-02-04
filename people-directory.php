@@ -176,11 +176,19 @@ if ( ! post_type_exists( 'people' ) ):
 	add_action('admin_init', 'people_admin_init');
 
 	function people_admin_init(){
+		add_meta_box('order', 'Order', 'order_callback', 'people', 'side', 'low');
 		add_meta_box('position', 'Position/Title', 'position_callback', 'people', 'side', 'low');
 		add_meta_box('phone', 'Work Phone Number', 'phone_callback', 'people', 'side', 'low');
 		add_meta_box('email', 'Work Email', 'email_callback', 'people', 'side', 'low');
 		add_meta_box('office_details', 'Office Details', 'office_details_callback', 'people', 'side', 'low');
 		add_meta_box('main_pic', 'Main Picture', 'main_pic_callback', 'people', 'normal', 'low');
+	}
+
+	function order_callback() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$order = $custom['order'][0] ? $custom['order'][0] : -1;
+		?><input type="number" name="order" value="<?php echo $order ?>" /><?php
 	}
 
 	function position_callback() {
@@ -249,6 +257,7 @@ if ( ! post_type_exists( 'people' ) ):
 		global $post;
 		if (get_post_type($post) == 'people') {
 			update_post_meta($post->ID, 'team', $_POST['team']);
+			update_post_meta($post->ID, 'order', $_POST['order']);
 			update_post_meta($post->ID, 'position', $_POST['position']);
 			update_post_meta($post->ID, 'phone', $_POST['phone']);
 			update_post_meta($post->ID, 'email', $_POST['email']);
@@ -386,6 +395,7 @@ function shortcode( $atts )
 	    		$personID = $person->ID;
                 $name = $person->post_title;
                 $main_pic = get_post_meta($personID, 'main_pic', true);
+                $order = get_post_meta($personID, 'order', true);
                 $position = get_post_meta($personID, 'position', true);
                 $phone = get_post_meta($personID, 'phone', true);
                 $email = get_post_meta($personID, 'email', true);

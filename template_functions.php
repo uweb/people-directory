@@ -8,6 +8,7 @@ function last_name_sort($a, $b) {
 	$name_priority = get_option('people_priority_people', array()); //put names you want at the top of the teams here
 	$first = $a->post_title;
 	$second = $b->post_title;
+	// Sort by name priority setting
 	$first_index = array_search($first, $name_priority);
 	$second_index = array_search($second, $name_priority);
 	if ($first_index) {
@@ -21,8 +22,23 @@ function last_name_sort($a, $b) {
 	elseif ($second_index) {
          return 1;
     }
-	$first = explode(' ', $first);
-	$second = explode(' ', $second);
+    // Then by order #
+	$first_order = $a->order ? $a->order : -1;
+	$second_order = $b->order ? $b->order : -1;
+	if ($first_order > -1) {
+		if ($second_order > -1) {
+			return $first_order - $second_order;
+		} else {
+			return -1;
+		}
+	} else if ($second_order > -1) {
+		return 1; 
+	}
+	//Then by last name
+	$first = explode(',', $first);
+	$second = explode(',', $second);
+	$first = explode(' ', $first[0]);
+	$second = explode(' ', $second[0]);
 	return strcmp($first[sizeof($first) - 1], $second[sizeof($second) - 1]);
 }
 

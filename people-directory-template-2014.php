@@ -61,6 +61,7 @@ include 'template_functions.php';
                         $personID = $person->ID;
                         $name = $person->post_title;
                         $main_pic = get_post_meta($personID, 'main_pic', true);
+                        $order = get_post_meta($personID, 'order', true);
                         $position = get_post_meta($personID, 'position', true);
                         $phone = get_post_meta($personID, 'phone', true);
                         $email = get_post_meta($personID, 'email', true);
