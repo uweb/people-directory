@@ -45,14 +45,15 @@ function last_name_sort($a, $b) {
 //this function groups people by team.  The teams are in the order they come up except for when manually ordered
 function group_by_team($people) {
 	$priority_team = get_option('people_priority_team');	//this is the name of a team you want to float to the top
-	$team_groups = array($priority_team => array());
+	$team_priority = array($priority_team => array());
+	$team_groups = array();
 	$team_no_team = array();
 	foreach ($people as $person) {
 		$team = get_the_terms($person->ID, 'teams');
 		$assigned_team = null;
 		if (!$team) {
 			array_push($team_no_team, $person);
-		}
+		} 
 		else {
 			$teams = array_values($team);
 			foreach ($teams as $team) {
@@ -67,10 +68,18 @@ function group_by_team($people) {
 			if (!array_key_exists($assigned_team, $team_groups)) {
 				$team_groups[$assigned_team] = array();
 			}
-			array_push($team_groups[$assigned_team], $person);
+
+			if ($assigned_team == $priority_team) {
+				array_push($team_priority[$priority_team], $person);
+			} else {
+				array_push($team_groups[$assigned_team], $person);
+			}
 		}
 	}
+	ksort($team_groups);
 	$team_groups[''] = $team_no_team;
+	//$team_groups[$priority_team] = $team_priority[$priority_team];
+	array_unshift($team_groups, $team_priority[$priority_team]);
 	return $team_groups;
 }
 ?>

@@ -53,9 +53,12 @@ include 'template_functions.php';
                 $name_link = false;
             }
             $teams = group_by_team($people);
-            ksort($teams);
             foreach($teams as $team => $people):
-                if (count($people) != 0): 	//just in case there are zero people in a manually specified team (or Team No-Team) ?>
+                if (count($people) != 0): 	//just in case there are zero people in a manually specified team (or Team No-Team) 
+                    if ($team === 0) {
+                        $team = get_option('people_priority_team');
+                    }
+                    ?>
                     <div id='<?php echo $team; ?>' class='searchable-container'><h3><?php echo $team; ?></h3>
                     <?php foreach ($people as $person):
                         $personID = $person->ID;
