@@ -16,7 +16,7 @@ register_activation_hook( __FILE__, 'create_people_directory_page');
 register_deactivation_hook( __FILE__, 'delete_people_directory_page');
 
 function create_people_directory_page() {
-	$people_directory_post = array( 
+	$people_directory_post = array(
 		'post_title' => 'People Directory',
 		'post_name' => 'people_directory',
 		'post_type' => 'page'
@@ -86,7 +86,7 @@ if ( ! post_type_exists( 'people' ) ):
         <div class='wrap'>
             <h2>People Directory Settings</h2>
             <form method='post' action='options.php'>
-                <?php 
+                <?php
                 settings_fields('people');
                 do_settings_sections('people_settings');
                 submit_button();
@@ -130,7 +130,7 @@ if ( ! post_type_exists( 'people' ) ):
         $option = get_option('people_priority_people');
         for ($i = 1; $i <= 5; $i++){
                 ?>
-                <p><?php echo $i ?>) 
+                <p><?php echo $i ?>)
                     <select name='people_priority_people[<?php echo $i ?>]' value='<?php echo $option[$i] ?>'/>
                     <option value='false'>----</option>
                     <?php
@@ -187,28 +187,28 @@ if ( ! post_type_exists( 'people' ) ):
 	function order_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$order = $custom['order'][0] ? $custom['order'][0] : -1;
+		$order = (isset($custom['order']) && $custom['order'][0]) ? $custom['order'][0] : -1;
 		?><input type="number" name="order" value="<?php echo $order ?>" /><?php
 	}
 
 	function position_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$position = $custom['position'][0];
+		$position = (isset($custom['position']) && $custom['position'][0]) ? $custom['position'][0] : '';
 		?><input name="position" value="<?php echo $position ?>" /><?php
 	}
 
 	function phone_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$phone = $custom['phone'][0];
+		$phone = (isset($custom['phone']) && $custom['phone'][0]) ? $custom['phone'][0] : '';
 		?><input name="phone" value="<?php echo $phone ?>" /><?php
 	}
 
 	function email_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$email = $custom['email'][0];
+		$email = (isset($custom['email']) && $custom['email'][0]) ? $custom['email'][0] : '';
 		?><input name="email" value="<?php echo $email ?>" /><?php
 	}
 
@@ -216,7 +216,7 @@ if ( ! post_type_exists( 'people' ) ):
         ?><p>These are optional. If office hours location is more than just one place or not in your office, use the office hours line for all office hours info.<p><?php
 		global $post;
 		$custom = get_post_custom($post->ID);
-        $office_location = $custom['office_location'];
+        $office_location = (isset($custom['office_location'])) ? $custom['office_location'] : '';
         if (!empty($office_location)) {
             $office_location = $office_location[0];
         }
@@ -225,7 +225,7 @@ if ( ! post_type_exists( 'people' ) ):
 		if (!empty($office_location)) {
 			?>value='<?php echo $office_location ?>' <?php
 		}
-        $office_hours = $custom['office_hours'];
+        $office_hours = isset($custom['office_hours']) ? $custom['office_hours'] : '';
         if (!empty($office_hours)) {
             $office_hours = $office_hours[0];
         }
@@ -240,7 +240,7 @@ if ( ! post_type_exists( 'people' ) ):
 	function main_pic_callback() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$pic_url = $custom['main_pic'][0];
+		$pic_url = (isset($custom['main_pic']) && $custom['main_pic'][0]) ? $custom['main_pic'][0] : '';
 		?><p>Use the Add Media button above to the image upload or select from uploaded images. The field below accepts an image url, so enter the generated url here (or if you want to use an image not hosted here, just enter the url for that image).</p><?php
 		?><input style='width:99%' name="main_pic" value="<?php echo $pic_url ?>" /><?php
 		if (!empty($pic_url)) {
@@ -308,7 +308,7 @@ if ( ! post_type_exists( 'people' ) ):
 			else if (file_exists(get_template_directory() . '/' . $people_directory_template)) {
 				return get_template_directory() . '/' . $people_directory_template;
 			}
-			else { 
+			else {
 				return $this_dir . '/' . $people_directory_template;
 			}
 		}
@@ -386,7 +386,7 @@ function shortcode( $atts )
 	    ksort($array);
 	    $return = '';
 	    foreach($array as $person){
-	    	$personteam = get_the_terms($person->ID, 'teams'); 
+	    	$personteam = get_the_terms($person->ID, 'teams');
 	    	$teams = array();
 	    	foreach($personteam as $team){
 	    		$teams[] = strtolower($team->name);
@@ -401,34 +401,34 @@ function shortcode( $atts )
                 $email = get_post_meta($personID, 'email', true);
                 $person_teams = implode(' ', $teams);
 
-	    		$return .= "<div class='profile-list searchable'>" . 
-	                            "<img width='75' height='100' "; 
-					            if (empty($main_pic)) { 
-					            	$return .= "class='no-pic'"; 
-					            }  
+	    		$return .= "<div class='profile-list searchable'>" .
+	                            "<img width='75' height='100' ";
+					            if (empty($main_pic)) {
+					            	$return .= "class='no-pic'";
+					            }
 					            $return .= "src='" . $main_pic ."' alt='" . $name . "' />" .
 	                            	"<div class='info'>";
 	                                if (get_option('people_visible_setting')){
 	                                    $return .= "<a href='" . get_permalink($personID) . "'>";
-	                               	} 
+	                               	}
 	                                $return .= "<h3 class='name search-this'>" . $name . "</h3>";
 	                                if (get_option('people_visible_setting')){
 	                                    $return .= "</a>";
 	                                }
 	                                $return .= "<p class='title search-this'>" . $position . "</p>" .
 	                                	"<p class='hidden search-this'>" . $person_teams . "</p>";
-	                                if ($phone){  
+	                                if ($phone){
 	                                	$return .= "<p><b>Telephone:</b>" . $phone . "</p>";
-	                                } 
-	                                if (trim($email)){ 
+	                                }
+	                                if (trim($email)){
 	                                	$return .= "<p><b>Email:</b> <a href='mailto:" . $email . "'>" . $email . "</a></p>";
-	                                } 
+	                                }
 	                            $return .= "</div>" .
 	                        "</div>";
 	    	}
 	    }
 
-    return $return; 
+    return $return;
 
 
   }
