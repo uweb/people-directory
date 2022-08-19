@@ -278,12 +278,12 @@ if ( ! post_type_exists( 'people' ) ):
 			else if (file_exists(get_template_directory() . '/' . $single_person_template)) {
 				return get_template_directory() . '/' . $single_person_template;
 			}
-            if (wp_get_theme() == 'UW 2013') {
-				return $this_dir . '/' . $single_person_template;
+            if (wp_get_theme() == 'UW 2014') {
+				return $this_dir . '/' . 'single-people-2014.php';
 			}
             else {
-                return $this_dir . '/' . 'single-people-2014.php';
-            }
+                return $this_dir . '/' . $single_person_template;
+			}
 		}
         return $template;
 	}
@@ -295,7 +295,7 @@ if ( ! post_type_exists( 'people' ) ):
         if ($custom_page != "") {
             $is_directory = ($is_directory || is_page(get_option('people_directory_page_setting')));
         }
-        if (wp_get_theme() != 'UW 2013') {
+        if (wp_get_theme() == 'UW 2014') {
             $people_directory_template = 'people-directory-template-2014.php';
         }
         else {
@@ -388,7 +388,7 @@ function shortcode( $atts )
 	    foreach($array as $person){
 	    	$personteam = get_the_terms($person->ID, 'teams'); 
 	    	$teams = array();
-	    	foreach($personteam as $team){
+	    	foreach((array)$personteam as $team){
 	    		$teams[] = strtolower($team->name);
 	    	}
 	    	if($atts->team == null || in_array(strtolower($atts->team), $teams)){ // || $personteam == $atts->team){
