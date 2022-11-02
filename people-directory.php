@@ -352,7 +352,7 @@ add_action('init', 'load_other_resources');
 
 function load_other_resources() {
 	wp_enqueue_script('jquery');
-	wp_register_script('live-search', plugins_url('js/live-search.js', __FILE__), 'jquery');
+	wp_register_script('live-search', plugins_url('js/live-search.js', __FILE__), array( 'jquery' ), false, true);
 	wp_enqueue_script('live-search');
 	wp_register_style('directory-style', plugins_url('css/people-directory.css', __FILE__));
 	wp_enqueue_style('directory-style');
