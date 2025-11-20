@@ -22,8 +22,9 @@ get_template_part( 'template-parts/header', 'image' );
                         
                     <div class="entry-content">
                         <?php $main_pic = $meta['main_pic'][0];
+                        $title = get_the_title();
                         if (!empty($main_pic)) { ?>
-                            <img class='people-image' src=<?php echo $main_pic ?> />
+                            <img class='people-image' src=<?php echo $main_pic ?> alt="<?php echo $title ?>" />
                         <?php }
                         $office_location = $meta['office_location'][0];
                         $office_hours = $meta['office_hours'][0]; 
@@ -37,7 +38,7 @@ get_template_part( 'template-parts/header', 'image' );
                         } ?>
                             <div class='people-contact<?php if ($location_present || $hours_present) { ?> big-people-contact<?php } if (empty($main_pic)) { ?> wide-people-contact<?php } ?>'>
                             
-                            <?php $title = get_the_title();
+                            <?php 
                         if (!empty($title)): ?>
                         <h1><?php echo $title ?></h1>
                         <?php endif; ?>
